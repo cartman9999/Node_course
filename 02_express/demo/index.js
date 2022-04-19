@@ -37,4 +37,7 @@ app.use(helmet()) // Helps secure your apps by setting various HTTP headers.
 
 // Set server
 const port = process.env.PORT || 3100
-app.listen(port, () => winston.info(`Listening on http://localhost:${port}`))
+const server = app.listen(port, () => winston.info(`Listening on http://localhost:${port}`))
+
+// Export the server for testing purposes
+module.exports = server

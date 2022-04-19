@@ -6,17 +6,21 @@ const router = express.Router()
 const { Genre, validate } = require('../models/genre')
 const auth = require('../middleware/auth')
 const admin = require('../middleware/admin')
+const validateObjectId = require('../middleware/validateObjectId')
 
 router.get('/', async (req, res) => {
     const genres = await Genre.find({}).sort('name')
     return res.send(genres)
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateObjectId, async (req, res) => {
     // req.params -> Used to read data required in route
     // req.query -> Used to read additional paramets sent as query parameters in the route
     // req.body -> Used to read data that travel through the request body
     const genre = await Genre.findById(req.params.id)
+
+    // if (!genre) return res.status(404).send('The genre with the given ID doesn´t exists.')
+
     return res.send(genre)
 })
 
@@ -29,15 +33,9 @@ router.post('/', auth, async (req, res) => {
     
     // Create new genre
     const genre = new Genre({ name: req.body.name })
+    await genre.save()
 
-    try {
-        await genre.save()
-        res.status(201).send(genre)
-    } catch (err) {
-        for (field in err.errors) {
-            console.error(`${field}: ${err.errors[field].message}`)
-        }
-    }
+    return res.status(201).send(genre)
 })
 
 router.put('/:id', auth, async (req, res) => {

@@ -1,4 +1,9 @@
 {
     "name": "My Express App",
-    "jwtPrivateKey": ""
+    "jwtPrivateKey": "",
+    "db": "mongodb://127.0.0.1:27017/",
+    "db_name": "vidly",
+    "db_auth_db": "admin",
+    "db_auth_user": "myUserAdmin",
+    "db_auth_pass": "root"
 }
